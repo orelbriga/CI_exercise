@@ -14,8 +14,7 @@ pipeline {
                     memory: "8192Mi"
                   requests:
                     memory: "1024Mi"
-            tty: true
-            
+            tty: true            
         '''
         }
     }
@@ -31,14 +30,14 @@ pipeline {
         stage('Check ZIP files') {
             steps {
                 container('centospy') {
-                    sh 'echo found'
+                    sh 'pwd'
                 }
             }
         }
-        post {
-            always {
-                archiveArtifacts artifacts: 'generatedFile.txt', onlyIfSuccessful: true
-            }
+    }
+    post {
+        always {
+            archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
         }
     }
 }
