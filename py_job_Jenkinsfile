@@ -19,18 +19,17 @@ pipeline {
         }
     }
     stages {
-        stage('Run python script') {
+        stage('OS and py script validation') {
             steps {
                 container('centospy') {
                     containerLog 'centospy'
-                    sh 'python3 /tmp/zip_job.py'
                 }
             }
         }
-        stage('Check ZIP files') {
+        stage('Run py script') {
             steps {
                 container('centospy') {
-                    sh 'pwd'
+                    sh 'python3 /tmp/zip_job.py'
                 }
             }
         }
