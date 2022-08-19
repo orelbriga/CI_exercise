@@ -7,38 +7,20 @@ pipeline {
         kind: Pod
         spec:
           containers:
-          - name: centospy
-            image: orelbriga/centos-py:2
-            resources:
-                  limits:
-                    memory: "8192Mi"
-                  requests:
-                    memory: "1024Mi"
+          - name: gradle
+            image: gradle:jdk11-alpine
+            command:
+            - cat
             tty: true
-          volumeMounts:
-            - name: agent-data
-              mountPath: /home/jenkins/agent/workspace
-        volumes:
-          - name: agent-data
-            persistentVolumeClaim:
-              claimName: jenkins-pv-claim
-            
         '''
         }
     }
     stages {
-        stage('Run python script') {
+        stage('Run gradle') {
             steps {
-                container('centospy') {
-                    containerLog 'centospy'
-                    sh 'python3 /tmp/zip_job.py'
-                }
-            }
-        }
-        stage('Check ZIP files') {
-            steps {
-                container('centospy') {
-                    sh 'echo found'
+                container('gradle') {
+                    sh '''gradle -version
+                          gradle build'''
                 }
             }
         }
