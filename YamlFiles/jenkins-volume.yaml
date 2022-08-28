@@ -5,15 +5,20 @@ kind: PersistentVolume
 metadata:
   name: jenkins-pv
   namespace: jenkins
+  labels:
+    useFor: ci-task
 spec:
-  storageClassName: jenkins-pv
+  storageClassName: local-storage
   accessModes:
     - ReadWriteOnce
   capacity:
     storage: 20Gi
-  persistentVolumeReclaimPolicy: Retain
+  persistentVolumeReclaimPolicy: Delete
   hostPath:
     path: /data/jenkins-volume/
+  claimRef:
+    namespace: jenkins
+    name: jenkins-pv-claim
 
 
 # Persistent Volume Claim
@@ -29,3 +34,6 @@ spec:
   resources:
     requests:
       storage: 20Gi
+  selector:
+    matchLabels:
+      useFor: ci-task
