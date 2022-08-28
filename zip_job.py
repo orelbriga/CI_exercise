@@ -18,8 +18,9 @@ for file in files:
         if not os.path.isfile(f"{file}.txt"):
             exit(print(f'py script aborted, failed to create {file}.txt'))
     zippedFile = createZip(file)
+    # Delete the originial file (redundent):
     os.remove(f'{file}.txt')
     if not os.path.isfile(zippedFile):
         exit(print(f'py script aborted, failed to create {zippedFile}'))
 
-print('All files were created successfully.')
+print('All zip files were created successfully.')
