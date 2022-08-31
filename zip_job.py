@@ -16,7 +16,7 @@ files = ['a', 'b', 'c', 'd']
 for file in files:
     try:
         with open(f"{file}.txt", "w+") as f:
-            f.write(f"{file}")
+            f.write("test")
     except FileNotFoundError:
         exit(f"{file}.txt doesn't exists")
     zippedFile = createZip(file)
