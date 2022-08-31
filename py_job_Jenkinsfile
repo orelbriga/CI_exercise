@@ -18,13 +18,9 @@ pipeline {
             steps {
                 container('centospy') {
                     sh 'python3 /tmp/zip_job.py'
+                    archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
                 }
             }
-        }
-    }
-    post {
-        success {
-            archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
         }
     }
 }
