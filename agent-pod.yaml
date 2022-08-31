@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    - name: centospy
+      image: orelbriga/centos-py:2
+      imagePullPolicy: "IfNotPresent"
+      resources:
+        limits:
+          memory: "8192Mi"
+        requests:
+          memory: "1024Mi"
+      tty: true
