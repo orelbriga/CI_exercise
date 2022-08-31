@@ -16,12 +16,12 @@ files = ['a', 'b', 'c', 'd']
 for file in files:
     try:
         with open(f"{file}.txt", "w+") as f:
-            f.write("test")
+            f.write(f"test-{file}")
     except FileNotFoundError:
         exit(f"{file}.txt doesn't exists")
     zippedFile = createZip(file)
     # Delete the originial file (redundent file):
-    os.remove(f"{file}.txt")
+    # os.remove(f"{file}.txt")
     if not os.path.isfile(zippedFile):
         exit(f'py script aborted, failed to create {zippedFile}')
 
