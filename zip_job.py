@@ -14,13 +14,15 @@ def createZip(txtFile):
 
 files = ['a', 'b', 'c', 'd']
 for file in files:
-    with open(f"{file}.txt", "w") as f:
-        if not os.path.isfile(f"{file}.txt"):
-            exit(print(f'py script aborted, failed to create {file}.txt'))
+    try:
+        with open(f"{file}.txt", "w+") as f:
+            f.write('')
+    except FileNotFoundError:
+        exit(f"{file}.txt doesn't exists")
     zippedFile = createZip(file)
-    # Delete the originial file (redundent):
-    os.remove(f'{file}.txt')
+    # Delete the originial file (redundent file):
+    os.remove(f"{file}.txt")
     if not os.path.isfile(zippedFile):
-        exit(print(f'py script aborted, failed to create {zippedFile}'))
+        exit(f'py script aborted, failed to create {zippedFile}')
 
 print('All zip files were created successfully.')
