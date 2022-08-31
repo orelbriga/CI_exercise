@@ -9,6 +9,7 @@ pipeline {
         stage('OS and py script validation') {
             steps {
                 container('centospy') {
+                    echo 'Printing OS type and zip_job.py location: '
                     containerLog 'centospy'
                 }
             }
@@ -22,7 +23,7 @@ pipeline {
         }
     }
     post {
-        always {
+        success {
             archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
         }
     }
