@@ -9,7 +9,7 @@ pipeline {
         stage('OS and py script validation') {
             steps {
                 container('centospy') {
-                    echo 'Printing OS type and zip_job.py location: '
+                    echo 'Printing OS type and checking if zip_job.py exists on /tmp folder: '
                     containerLog 'centospy'
                 }
             }
