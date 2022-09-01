@@ -1,15 +1,9 @@
 import os
+import sys
 from zipfile import ZipFile
 
 verENV = os.environ.get('VERSION')
 print(verENV)
-
-'''def createZip(txtFile):
-    zipObj = ZipFile(f'{txtFile}_{verENV}.zip', 'w')
-    zipObj.write(f'{txtFile}.txt')
-    zipObj.close()
-    return zipObj
-'''
 
 
 def main():
@@ -20,17 +14,19 @@ def main():
             with open(f"{file}.txt", "w+") as f:
                 f.write(f"test-{file}")
         except FileNotFoundError:
-            exit(f"{file}.txt doesn't exists")
-        ''' zippedFile = createZip(file)
-    
-        # Delete the originial file (redundent file):
-        os.remove(f"{file}.txt")
-        if not os.path.isfile(zippedFile):
-            exit(f'py script aborted, failed to create zip file for {file}.txt')
-    '''
-        with ZipFile(f"{file}_{verENV}.zip", "w") as newZip:
-            newZip.write(f"{file}.txt")
-        print('All zip files were created successfully.')
+            sys.exit(f"{file}.txt wasn't created - aborting the script")
+
+        try:
+            with ZipFile(f"{file}_{verENV}.zip", "w") as newZip:
+                newZip.write(f"{file}.txt")
+                # Delete the originial file (redundent file):
+                os.remove(f"{file}.txt")
+                print(newZip.filename)
+
+        except FileNotFoundError:
+            sys.exit(f"{newZip.filename} wasn't created - aborting the script")
+
+    print('All zip files were created successfully.')
 
 
 if __name__ == "__main__":
