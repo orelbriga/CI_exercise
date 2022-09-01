@@ -20,8 +20,9 @@ for file in files:
     except FileNotFoundError:
         exit(f"{file}.txt doesn't exists")
     zippedFile = createZip(file)
+
     # Delete the originial file (redundent file):
-    # os.remove(f"{file}.txt")
+    os.remove(f"{file}.txt")
     if not os.path.isfile(zippedFile):
         exit(f'py script aborted, failed to create {zippedFile}')
 
