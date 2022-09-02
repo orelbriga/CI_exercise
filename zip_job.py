@@ -21,7 +21,7 @@ def main():
                 newZip.write(f"{file}.txt")
                 # Delete the originial file (redundent file):
                 os.remove(f"{file}.txt")
-                print(newZip.filename)
+                print(f"{newZip.filename} created")
 
         except FileNotFoundError:
             sys.exit(f"{newZip.filename} wasn't created - aborting the script")
