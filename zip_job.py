@@ -2,11 +2,9 @@ import os
 import sys
 from zipfile import ZipFile
 
-verENV = os.environ.get('VERSION')
-print(verENV)
-
 
 def main():
+    verENV = os.environ.get('VERSION')
     files = ['a', 'b', 'c', 'd']
     for file in files:
 

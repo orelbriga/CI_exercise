@@ -17,6 +17,7 @@ pipeline {
         stage('Run py script') {
             steps {
                 container('centospy') {
+                    echo 'Running python script for creating zip files: '
                     sh 'python3 /tmp/zip_job.py'
                     archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
                 }
