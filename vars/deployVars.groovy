@@ -34,12 +34,12 @@ def nodePort() {
 
 def getAppLogs(Map config = [:]) {
     try {
-        if (config.appName != null ) {
+        if (config.appName != '' ) {
             sh "./kubectl logs ${config.appName} | tee ${config.appName}.log"
         }
     }
     catch (Exception e) {
-        error("Mandatory paramater 'appName' cannot be null")
+        error("Mandatory paramater 'appName' cannot be empty")
     }
 
 }
