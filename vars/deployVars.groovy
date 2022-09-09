@@ -30,3 +30,8 @@ def nodePort() {
             returnStdout: true
     ).trim()
 }
+
+
+def getAppLogs(Map config = [:]) {
+    sh "./kubectl logs ${config.appName} | tee ${config.appName}.log"
+}
