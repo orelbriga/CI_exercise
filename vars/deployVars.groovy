@@ -40,16 +40,17 @@ def nodePort() {
 
 def getAppLogs(Map config = [:]) {
     try {
-        config.appName ?: appName()
-        sh "./kubectl logs ${config.appName} | tee ${config.appName}.log"
+        def APP = config.appName ?: appName()
+        sh "./kubectl logs ${APP} | tee ${APP}.log"
     }
     catch (Exception e) {
         error("Mandatory paramater 'appName' cannot be empty")
     }
 }
 
+
 def getRequest(Map config = [:]) {
     echo "Sending GET request to the application: "
     def RESPONSE = httpRequest "http://${config.clusterHostIP}:${config.nodePort}"
-    println("Content: "+RESPONSE.content)
+    println("Content: " + RESPONSE.content)
 }
