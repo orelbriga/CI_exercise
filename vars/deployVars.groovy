@@ -1,3 +1,9 @@
+def downloadKubectl() {
+    sh  """wget "https://storage.googleapis.com/kubernetes-release/release/v1.24.1/bin/linux/amd64/kubectl"
+           chmod +x ./kubectl"""
+}
+
+
 def appName() {
     sh(
             script: './kubectl get pod | grep hello-world-app-$BUILD_NUMBER-* | \
@@ -35,10 +41,9 @@ def nodePort() {
 def getAppLogs(Map config = [:]) {
     try {
         sh "./kubectl logs ${config.appName} | tee ${config.appName}.log"
-        }
-
+    }
     catch (Exception e) {
         error("Mandatory paramater 'appName' cannot be empty")
     }
-
 }
+
