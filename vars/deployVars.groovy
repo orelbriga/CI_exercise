@@ -7,20 +7,26 @@ def appName() {
 }
 
 
-def podState = sh(
-        script: './kubectl get po | grep hello-world-app-$BUILD_NUMBER-* | \
+def podState() {
+    sh(
+            script: './kubectl get po | grep hello-world-app-$BUILD_NUMBER-* | \
                                     awk \'{print $3}\'',
-        returnStdout: true
-).trim()
+            returnStdout: true
+    ).trim()
+}
 
 
-def clusterHostIP = sh(
-        script: './kubectl get pod -n kube-system $(./kubectl get po -n kube-system | grep dns \
+def clusterHostIP() {
+    sh(
+            script: './kubectl get pod -n kube-system $(./kubectl get po -n kube-system | grep dns \
                             | awk \'{print $1}\') -o=jsonpath=\'{.status.hostIP}\' ', returnStdout: true
-).trim()
+    ).trim()
+}
 
 
-def nodePort = sh(
-        script: './kubectl get svc hello-world-svc-$BUILD_NUMBER -o=jsonpath=\'{.spec.ports[].nodePort}\' ',
-        returnStdout: true
-).trim()
+def nodePort() {
+    sh(
+            script: './kubectl get svc hello-world-svc-$BUILD_NUMBER -o=jsonpath=\'{.spec.ports[].nodePort}\' ',
+            returnStdout: true
+    ).trim()
+}
