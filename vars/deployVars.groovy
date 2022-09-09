@@ -47,3 +47,8 @@ def getAppLogs(Map config = [:]) {
     }
 }
 
+def getRequest(Map config = [:]) {
+    echo "Sending GET request to the application: "
+    def RESPONSE = httpRequest "http://${config.clusterHostIP}:${config.nodePort}"
+    println("Content: "+RESPONSE.content)
+}
