@@ -1,5 +1,5 @@
 def downloadKubectl(Map config = [:]) {
-    sh  """wget "https://storage.googleapis.com/kubernetes-release/release/v${config.version}/bin/linux/amd64/kubectl"
+    sh  """wget "https://storage.googleapis.com/kubernetes-release/release/v1.24.1/bin/linux/amd64/kubectl"
            chmod +x ./kubectl"""
 }
 
