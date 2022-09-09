@@ -1,0 +1,33 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+    - name: gradle
+      image: gradle:jdk11
+      imagePullPolicy: "IfNotPresent"
+      command:
+        - cat
+      tty: true
+      resources:
+        limits:
+          memory: "2048Mi"
+        requests:
+          memory: "1024Mi"
+    - name: docker
+      image: docker
+      imagePullPolicy: "IfNotPresent"
+      command:
+        - cat
+      tty: true
+      resources:
+        limits:
+          memory: "1024Mi"
+        requests:
+          memory: "512Mi"
+      volumeMounts:
+        - mountPath: /var/run/docker.sock
+          name: docker-sock
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
