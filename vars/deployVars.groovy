@@ -40,7 +40,7 @@ def nodePort() {
 
 def getAppLogs(Map config = [:]) {
     try {
-        config.appName ?: nodePort()
+        config.appName ?: appName()
         sh "./kubectl logs ${config.appName} | tee ${config.appName}.log"
     }
     catch (Exception e) {
