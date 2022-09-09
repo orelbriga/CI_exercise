@@ -1,3 +1,5 @@
+import org.yaml.snakeyaml.events.NodeEvent
+
 def downloadKubectl(Map config = [:]) {
     sh  """wget "https://storage.googleapis.com/kubernetes-release/release/v${config.version}/bin/linux/amd64/kubectl"
            chmod +x ./kubectl"""
@@ -47,7 +49,11 @@ def getAppLogs(Map config = [:]) {
 
 
 def getRequest(Map config = [:]) {
+    def CLUSTER_HOST_IP = clusterHostIP()
+    def IP = config.clusterHostIP ?: CLUSTER_HOST_IP
+    def NODE_PORT = nodePort()
+    def PORT = config.nodePort ?: NODE_PORT
     echo "Sending GET request to the application: "
-    def RESPONSE = httpRequest "http://${config.clusterHostIP}:${config.nodePort}"
+    def RESPONSE = httpRequest "http://${IP}:${PORT}"
     println("Content: " + RESPONSE.content)
 }
