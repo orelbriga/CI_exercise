@@ -7,3 +7,8 @@ def build() {
                        docker build -t ${env.REPOSITORY}:${env.BUILD_NUMBER} . """
     }
 }
+
+
+def push() {
+    sh "docker push ${env.REGISTRY}/${env.REPOSITORY}:${env.TAG}"
+}
