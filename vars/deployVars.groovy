@@ -34,7 +34,7 @@ def clusterHostIP() {
 
 def nodePort() {
     sh(
-            script: './kubectl get svc hello-world-svc-$BUILD_NUMBER -o=jsonpath=\'{.spec.ports[].nodePort}\' ',
+            script: './kubectl get svc hello-world-app-svc-$BUILD_NUMBER -o=jsonpath=\'{.spec.ports[].nodePort}\' ',
             returnStdout: true
     ).trim()
 }
