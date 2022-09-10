@@ -8,17 +8,8 @@ def downloadKubectl(Map config = [:]) {
 
 def appName() {
     sh(
-            script: './kubectl get pod | grep hello-world-app-$BUILD_NUMBER-* | \
-                                  awk \'{print $1}\'',
-            returnStdout: true
-    ).trim()
-}
-
-
-def podState() {
-    sh(
-            script: './kubectl get po | grep hello-world-app-$BUILD_NUMBER-* | \
-                                    awk \'{print $3}\'',
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG}-* | \
+                       awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 }
@@ -26,8 +17,8 @@ def podState() {
 
 def clusterHostIP() {
     sh(
-            script: './kubectl get pod -n kube-system $(./kubectl get po -n kube-system | grep dns \
-                            | awk \'{print $1}\') -o=jsonpath=\'{.status.hostIP}\' ', returnStdout: true
+            script: "./kubectl get pod -n kube-system \$(./kubectl get po -n kube-system | grep dns \
+                            | awk \'{print \$1}\') -o=jsonpath=\'{.status.hostIP}\' ", returnStdout: true
     ).trim()
 }
 
@@ -48,6 +39,16 @@ def getAppLogs(Map config = [:]) {
 }
 
 
+def podState() {
+    sh(
+            script: './kubectl get po | grep hello-world-app-$BUILD_NUMBER-* | \
+                                    awk \'{print $3}\'',
+            returnStdout: true
+    ).trim()
+}
+
+
+
 def getRequest(Map config = [:]) {
     def CLUSTER_HOST_IP = clusterHostIP()
     def IP = config.clusterHostIP ?: CLUSTER_HOST_IP
@@ -56,14 +57,4 @@ def getRequest(Map config = [:]) {
     echo "Sending GET request to the application: "
     def RESPONSE = httpRequest "http://${IP}:${PORT}"
     println("Content: " + RESPONSE.content)
-}
-
-def build() {
-    withCredentials([[$class: 'UsernamePasswordMultiBinding',
-                      credentialsId: 'dockerhub',
-                      usernameVariable: 'DOCKER_HUB_USER',
-                      passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
-        sh """ echo ${DOCKER_HUB_PASSWORD} | docker login --username ${DOCKER_HUB_USER} --password-stdin
-                       docker build -t ${env.REPOSITORY}:${env.BUILD_NUMBER} . """
-    }
 }
