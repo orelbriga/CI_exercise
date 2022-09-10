@@ -8,8 +8,7 @@ def downloadKubectl(Map config = [:]) {
 
 def appName() {
     sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG}-* | \
-                       awk \'{print \$1}\' ",
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG}-* | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 }
@@ -25,7 +24,7 @@ def clusterHostIP() {
 
 def nodePort() {
     sh(
-            script: './kubectl get svc hello-world-app-svc-$BUILD_NUMBER -o=jsonpath=\'{.spec.ports[].nodePort}\' ',
+            script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
             returnStdout: true
     ).trim()
 }
@@ -41,8 +40,7 @@ def getAppLogs(Map config = [:]) {
 
 def podState() {
     sh(
-            script: './kubectl get po | grep hello-world-app-$BUILD_NUMBER-* | \
-                                    awk \'{print $3}\'',
+            script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG}-* | awk \'{print \$3}\' ",
             returnStdout: true
     ).trim()
 }
