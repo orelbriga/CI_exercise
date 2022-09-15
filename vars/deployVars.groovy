@@ -7,7 +7,7 @@ def downloadKubectl(Map config = [:]) {
 
 def appName() {
     sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG}-* | awk \'{print \$1}\' ",
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG}- | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 }
