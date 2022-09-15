@@ -7,7 +7,7 @@ def downloadKubectl(Map config = [:]) {
 
 def appName() {
     sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG}- | awk \'{print \$1}\' ",
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 }
@@ -40,7 +40,7 @@ def getAppLogs(Map config = [:]) {
 
 def podState() {
     sh(
-            script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG}-* | awk \'{print \$3}\' ",
+            script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
             returnStdout: true
     ).trim()
 }
