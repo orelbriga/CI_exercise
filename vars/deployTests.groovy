@@ -1,12 +1,13 @@
 def call() {
     withKubeConfig([credentialsId: 'secret-jenkins']) {
         log.info "installing kubectl on the container to check the application's pod state + logs:"
-        downloadKubectl(version:"1.24.1")
+        deployVars.downloadKubectl(version:"1.24.1")
         sleep 5
-        getRequest()
+        deployVars.getRequest()
         sleep 3
-        getAppLogs()
+        deployVars.getAppLogs()
         archiveArtifacts artifacts: "${env.IMAGE_NAME}-*.log"
-        checkPodState()
+        deployVars.checkPodState()
     }
 }
+
