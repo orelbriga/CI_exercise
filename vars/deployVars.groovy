@@ -4,14 +4,12 @@ def downloadKubectl(Map config = [:]) {
            chmod +x ./kubectl"""
 }
 
-
 def appName() {
     sh(
             script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 }
-
 
 def clusterHostIP() {
     sh(
@@ -21,14 +19,12 @@ def clusterHostIP() {
     ).trim()
 }
 
-
 def nodePort() {
     sh(
             script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
             returnStdout: true
     ).trim()
 }
-
 
 def getAppLogs(Map config = [:]) {
     def APP_POD_NAME = appName()
@@ -37,14 +33,12 @@ def getAppLogs(Map config = [:]) {
 
 }
 
-
 def podState() {
     sh(
             script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
             returnStdout: true
     ).trim()
 }
-
 
 def getRequest(Map config = [:]) {
     def CLUSTER_HOST_IP = clusterHostIP()
@@ -56,7 +50,6 @@ def getRequest(Map config = [:]) {
     echo "Content: " + RESPONSE.content
 }
 
-
 def checkPodState() {
     def APP_POD_NAME = appName()
     def POD_STATE = podState()
@@ -67,4 +60,3 @@ def checkPodState() {
         log.info "Application pod ${APP_POD_NAME} is in ${POD_STATE} state!"
     }
 }
-
