@@ -5,6 +5,5 @@ def terminateApp() {
 
 
 def deleteImage() {
-    sh '''docker image rmi -f orelbriga/hello-world-app:$BUILD_NUMBER
-          docker image prune -f  --filter="dangling=true" '''
+    sh "docker image rmi -f ${env.REPOSITORY}:${env.TAG}"
 }
