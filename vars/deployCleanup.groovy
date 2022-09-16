@@ -1,6 +1,6 @@
 
 def terminateApp() {
-    sh './kubectl delete deployment,services -l app=hello-world-app-${BUILD_NUMBER}'
+    sh "./kubectl delete deployment,services -l app=${env.IMAGE_NAME}-${env.TAG}"
 }
 
 

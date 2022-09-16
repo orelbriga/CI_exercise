@@ -60,7 +60,7 @@ def getRequest(Map config = [:]) {
 def checkPodState() {
     def APP_POD_NAME = appName()
     def POD_STATE = podState()
-    if (POD_STATE != "Running") {
+    if (!POD_STATE.equals("Running")) {
         error("Application pod ${APP_POD_NAME} is not healthy, check app log")
     }
     else {
