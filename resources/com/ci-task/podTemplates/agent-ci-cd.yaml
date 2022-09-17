@@ -13,6 +13,9 @@ spec:
           memory: "2048Mi"
         requests:
           memory: "1024Mi"
+      volumeMounts:
+        - mountPath: /home/gradle/.gradle/caches/modules-2
+          name: gradle-cache
     - name: docker
       image: docker
       imagePullPolicy: "IfNotPresent"
@@ -31,3 +34,6 @@ spec:
     - name: docker-sock
       hostPath:
         path: /var/run/docker.sock
+    - name: gradle-cache
+      hostPath:
+        path: /root/.gradle-ro-cache/modules-2
