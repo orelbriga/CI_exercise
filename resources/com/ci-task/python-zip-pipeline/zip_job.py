@@ -7,7 +7,6 @@ def main():
     verENV = os.environ.get('VERSION')
     files = ['a', 'b', 'c', 'd']
     for file in files:
-
         try:
             with open(f"{file}.txt", "w+") as f:
                 f.write(f"test-{file}")
