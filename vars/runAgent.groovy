@@ -9,14 +9,14 @@ def call () {
                 stage('Git checkout') {
                     container('gradle') {
                         checkout([$class: 'GitSCM', branches: [[name: '*/draft']], userRemoteConfigs: [[credentialsId: 'github-private',\
-        url: 'https://github.com/orelbriga/hello-world.git']]])
+                                  url: 'https://github.com/orelbriga/hello-world.git']]])
                     }
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
                         log.info "compiling code + running  tests: "
                         sh """chmod +x ./gradlew
-               ./gradlew test """
+                             ./gradlew test """
                     }
                 }
                 stage('Gradle JIB: Build docker image & push to registry') {
