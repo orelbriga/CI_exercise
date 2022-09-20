@@ -40,22 +40,27 @@ def call () {
                         try {
                             log.info "Running deployment tests"
                             deployTests()
+                            currentBuild.currentResult = 'SUCCESS'
                         }
                         catch (e) {
+                            currentBuild.currentResult = 'FAILURE'
                             error  "Deployment tests failed due to the error: ${e}"
                         }
                         finally {
                             if (currentBuild.currentResult == 'SUCCESS') {
                                 log.info "Deployment tests passed successfully"
+                                log.info "Cleanup: Terminate the app + delete unused image"
+                                deployCleanup()
                             }
-                            log.info "Cleanup: Terminate the app + delete unused image"
-                            deployCleanup()
+                            else {
+                                log.info "keeping the app alive for investigation"
+                            }
                         }
                     }
                 }
             }
             catch (e) {
-                error "Jenkins pipeline error- ${e}"
+                error "Pipeline failed due to the error: ${e}"
             }
         }
     }
