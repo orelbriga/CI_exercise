@@ -46,7 +46,7 @@ def getRequest(Map config = [:]) {
     def NODE_PORT = nodePort()
     def PORT = config.nodePort ?: NODE_PORT
     echo "Sending GET request to the application: "
-    def RESPONSE = httpRequest "http://${IP}:${PORT}"
+    def RESPONSE = httpRequest "http://${IP}:${PORT}", timeout: 5
     echo "Content: " + RESPONSE.content
 }
 

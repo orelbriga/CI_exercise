@@ -4,7 +4,7 @@ def call() {
             log.info "installing kubectl on the container to check the application's pod state + logs:"
             deployVars.downloadKubectl(version:"1.24.1")
             sleep 5
-            retry(2) {
+            retry(3) {
                 deployVars.getRequest()
             }
             sleep 3
