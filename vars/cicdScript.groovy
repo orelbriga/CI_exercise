@@ -1,6 +1,8 @@
 def call () {
     env.REPOSITORY = env.REGISTRY_USER+"/"+env.IMAGE_NAME
     env.TAG = "${env.BUILD_NUMBER}"
+    String buildResult
+
     def POD_LABEL = "agent-${env.JOB_NAME}-${env.BUILD_NUMBER}"
     podTemplate(label: POD_LABEL,  yaml: libraryResource('com/ci-task/podTemplates/agent-ci-cd.yaml'))
     {
@@ -40,14 +42,14 @@ def call () {
                         try {
                             log.info "Running deployment tests"
                             deployTests()
-                            currentBuild.currentResult = 'SUCCESS'
+                            buildResult = 'SUCCESS'
                         }
                         catch (e) {
-                            currentBuild.currentResult = 'FAILURE'
+                            buildResult = 'FAILURE'
                             error  "Deployment tests failed due to the error: ${e}"
                         }
                         finally {
-                            if (currentBuild.currentResult == 'SUCCESS') {
+                            if (buildResult == 'SUCCESS') {
                                 log.info "Deployment tests passed successfully"
                                 log.info "Cleanup: Terminate the app + delete unused image"
                                 deployCleanup()
