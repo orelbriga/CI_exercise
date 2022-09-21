@@ -27,8 +27,8 @@ def nodePort() {
 }
 
 def getAppLogs(Map config = [:]) {
-    def APP_POD_NAME = appName()
-    def APP = config.appName ?: APP_POD_NAME
+    // def APP_POD_NAME = appName()
+    def APP = config.appName ?: appName()
     sh "./kubectl logs ${APP} | tee ${APP}.log"
 
 }
@@ -42,12 +42,12 @@ def podState() {
 
 def getRequest(Map config = [:]) {
     def CLUSTER_HOST_IP = clusterHostIP()
-    def IP = config.clusterHostIP ?: CLUSTER_HOST_IP
+    def IP = config.clusterHostIP ?: clusterHostIP()
     def NODE_PORT = nodePort()
     def PORT = config.nodePort ?: NODE_PORT
-    echo "Sending GET request to the application: "
-    def RESPONSE = httpRequest timeout:5, url: "http://${IP}:${PORT}"
-    echo "Content: " + RESPONSE.content
+    log.info "Sending GET request to the application: "
+    def RESPONSE = httpRequest timeout:30, url: "http://${IP}:${PORT}"
+    log.info "Content: " + RESPONSE.content
 }
 
 def checkPodState() {
