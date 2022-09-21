@@ -34,7 +34,16 @@ def call () {
                 stage('Gradle JIB: Build docker image & push to registry') {
                     container('gradle') {
                         try {
-                            sh "./gradlew jib --image=${env.REGISTRY}/${env.REPOSITORY}:${env.TAG}"
+                            withCredentials([[$class: 'UsernamePasswordMultiBinding',
+                                              credentialsId: 'dockerhub',
+                                              usernameVariable: 'DOCKER_HUB_USER',
+                                              passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
+                                sh(
+                                        script: """   ./gradlew jib \
+                                     -Djib.to.image=${env.REGISTRY}/${env.REPOSITORY}:${env.TAG} \
+                                     -Djib.to.auth.username=$DOCKER_HUB_USER \
+                                     -Djib.to.auth.password=$DOCKER_HUB_PASSWORD """, returnStdout: true)
+                            }
                         }
                         catch (e) {
                             error "Failed to build / push the image with Jib plugin due to error: $e"
