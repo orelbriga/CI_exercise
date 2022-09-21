@@ -16,12 +16,19 @@ def call () {
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
-                        log.info "compiling code + running  tests: "
-                        sh """chmod +x ./gradlew
-                             ./gradlew test """
-                        publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
-                        reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
-                        junit 'build/test-results/test/*.xml'
+                        try {
+                            log.info "compiling code + running  tests: "
+                            sh """chmod +x ./gradlew
+                                 ./gradlew test """
+                        }
+                        catch (e) {
+                            error("some of the tests have failed - $e ")
+                        }
+                        finally {
+                            junit 'build/test-results/test/*.xml'
+                            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
+                            reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                        }
                     }
                 }
                 stage('Gradle JIB: Build docker image & push to registry') {
