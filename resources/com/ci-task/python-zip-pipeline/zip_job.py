@@ -17,12 +17,13 @@ def main():
         try:
             with ZipFile(f"{file}_{verENV}.zip", "w") as newZip:
                 newZip.write(f"{file}.txt")
-                # Delete the originial file (redundent file):
-                os.remove(f"{file}.txt")
                 print(f"{newZip.filename} created")
 
         except FileNotFoundError:
-            sys.exit(f"{newZip.filename} wasn't created - aborting the script")
+            sys.exit(f"{newZip.filename} wasn't created, couldn't find {file}.txt to zip - aborting the script")
+
+        if not os.path.isfile(f"./{newZip.filename}"):
+            sys.exit(f"{newZip.filename} not found - aborting the script")
 
     print('All zip files were created successfully.')
 
