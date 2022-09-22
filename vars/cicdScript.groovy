@@ -10,7 +10,7 @@ def call () {
             try {
                 stage('Git checkout') {
                     container('gradle') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/draft']], userRemoteConfigs: [[credentialsId: 'github-private',\
+                        checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[credentialsId: 'github-private',\
                                   url: 'https://github.com/orelbriga/hello-world.git']]])
                     }
                 }
@@ -39,10 +39,10 @@ def call () {
                                               usernameVariable: 'DOCKER_HUB_USER',
                                               passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
                                 sh(
-                                        script: """   ./gradlew jib \
-                                     -Djib.to.image=${env.REGISTRY}/${env.REPOSITORY}:${env.TAG} \
-                                     -Djib.to.auth.username=$DOCKER_HUB_USER \
-                                     -Djib.to.auth.password=$DOCKER_HUB_PASSWORD """, returnStdout: true)
+                                        script: """ ./gradlew jib \
+                                        -Djib.to.image=${env.REGISTRY}/${env.REPOSITORY}:${env.TAG} \
+                                        -Djib.to.auth.username=$DOCKER_HUB_USER \
+                                        -Djib.to.auth.password=$DOCKER_HUB_PASSWORD """, returnStdout: true)
                             }
                         }
                         catch (e) {
