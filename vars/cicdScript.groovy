@@ -19,7 +19,7 @@ def call () {
                         try {
                             log.info "compiling code + running  tests: "
                             sh """chmod +x ./gradlew
-                                 ./gradlew test """
+                                 ./gradlew clean test """
                         }
                         catch (e) {
                             error("some of the tests have failed - $e ")
