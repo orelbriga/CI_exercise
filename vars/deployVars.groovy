@@ -46,8 +46,15 @@ def getRequest(Map config = [:]) {
     def NODE_PORT = nodePort()
     def PORT = config.nodePort ?: NODE_PORT
     log.info "Sending GET request to the application: "
-    def RESPONSE = httpRequest timeout:30, url: "http://${IP}:${PORT}"
-    log.info "Content: " + RESPONSE.content
+    retry(3) {
+        try {
+            def RESPONSE = httpRequest timeout:30, url: "http://${IP}:${PORT}"
+            log.info "Content: " + RESPONSE.content
+        }
+        catch (e) {
+            error "GET request failed due to error: $e"
+        }
+    }
 }
 
 def checkPodState() {
