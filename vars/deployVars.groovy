@@ -27,7 +27,6 @@ def nodePort() {
 }
 
 def getAppLogs(Map config = [:]) {
-    // def APP_POD_NAME = appName()
     def APP = config.appName ?: appName()
     sh "./kubectl logs ${APP} | tee ${APP}.log"
 
@@ -48,6 +47,7 @@ def getRequest(Map config = [:]) {
     log.info "Sending GET request to the application: "
     retry(3) {
         try {
+            sleep 5
             def RESPONSE = httpRequest timeout:30, url: "http://${IP}:${PORT}"
             log.info "Content: " + RESPONSE.content
         }
