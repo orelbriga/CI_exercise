@@ -10,7 +10,7 @@ def call () {
             try {
                 stage('Git checkout') {
                     container('gradle') {
-                        checkout([$class: 'GitSCM', branches: [[name: '*/master']], userRemoteConfigs: [[credentialsId: 'github-private',\
+                        checkout([$class: 'GitSCM', branches: [[name: '*/draft']], userRemoteConfigs: [[credentialsId: 'github-private',\
                                   url: 'https://github.com/orelbriga/hello-world.git']]])
                     }
                 }
