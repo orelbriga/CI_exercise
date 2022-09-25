@@ -13,7 +13,8 @@ podTemplate(label: POD_LABEL,  yaml: libraryResource('com/ci-task/podTemplates/a
                     archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
                 }
                 catch (e) {
-                    error "Py script was aborted due to the following error: $e"
+                    currentBuild.result = 'FAILURE'
+                    error "${currentBuild.result} - Py script was aborted due to the following error: $e"
                 }
             }
         }
