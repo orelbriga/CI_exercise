@@ -61,10 +61,10 @@ def call () {
                         try {
                             log.info "Running deployment tests"
                             deployTests()
-                            currentBuild.currentResult = 'SUCCESS'
+                            println("Build result is $currentBuild.currentResult")
                         }
                         catch (e) {
-                            currentBuild.currentResult = 'FAILURE'
+                            println("Build result is $currentBuild.currentResult")
                             error  "Deployment tests failed due to the error: ${e}"
                         }
                         finally {
