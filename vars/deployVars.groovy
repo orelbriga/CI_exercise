@@ -48,7 +48,7 @@ def getRequest(Map config = [:]) {
     retry(3) {
         try {
             sh "sleep 5s"
-            def RESPONSE = httpRequest timeout:30, url: "http://${IP}:${PORT}"
+            def RESPONSE = httpRequest url: "http://${IP}:${PORT}"
             log.info "Content: " + RESPONSE.content
         }
         catch (e) {
