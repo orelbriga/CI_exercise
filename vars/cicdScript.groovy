@@ -61,14 +61,14 @@ def call () {
                         try {
                             log.info "Running deployment tests"
                             deployTests()
-                            buildResult = 'SUCCESS'
+                            currentBuild.currentResult = 'SUCCESS'
                         }
                         catch (e) {
-                            buildResult = 'FAILURE'
+                            currentBuild.currentResult = 'FAILURE'
                             error  "Deployment tests failed due to the error: ${e}"
                         }
                         finally {
-                            if (buildResult == 'SUCCESS') {
+                            if (currentBuild.currentResult == 'SUCCESS') {
                                 log.info "Deployment tests passed successfully"
                                 log.info "Cleanup: Terminate the app + delete unused image"
                                 deployCleanup()
