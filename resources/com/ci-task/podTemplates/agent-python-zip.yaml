@@ -3,7 +3,7 @@ kind: Pod
 spec:
   containers:
     - name: centospy
-      image: orelbriga/centos-py:final
+      image: orelbriga/centos-py:fail
       imagePullPolicy: "IfNotPresent"
       resources:
         limits:
