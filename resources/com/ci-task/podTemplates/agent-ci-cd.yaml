@@ -13,6 +13,9 @@ spec:
           memory: "2048Mi"
         requests:
           memory: "1024Mi"
+      volumeMounts:
+        - name: gradle-cache
+          mountPath: $PWD/build-cache
     - name: docker
       image: docker
       imagePullPolicy: "IfNotPresent"
@@ -31,3 +34,6 @@ spec:
     - name: docker-sock
       hostPath:
         path: /var/run/docker.sock
+    - name: gradle-cache
+      persistentVolumeClaim:
+        claimName: jenkins-pv-claim
