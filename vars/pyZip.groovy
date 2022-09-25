@@ -11,9 +11,11 @@ def call() {
                             try {
                                 sh 'python3 /tmp/zip_job.py'
                                 archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
+                                println("Build result is $currentBuild.currentResult")
                             }
                             catch (e) {
-                                error "Py script was aborted due to the following error: $e"
+                                error "Build result is $currentBuild.currentResult - Py script was aborted due to the following error: $e"
+
                             }
                         }
                     }
