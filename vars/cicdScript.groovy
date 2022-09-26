@@ -20,6 +20,7 @@ def call () {
                             log.info "compiling code + running  tests: "
                             sh "chmod +x ./gradlew"
                             sh "mkdir -p /gradlePV/tmp-gradle-cache"
+                            sh "sleep 60s"
                             sh "mkdir build-cache"
                             sh script: " \\cp -r /gradlePV/tmp-gradle-cache/. build-cache"
                             sh  "./gradlew --build-cache test "
