@@ -16,13 +16,15 @@ def call () {
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
-                        try {
-                            log.info "compiling code + running  tests: "
-                            sh "chmod +x ./gradlew"
-                            sh "mkdir -p /gradlePV/tmp-gradle-cache && ls -ltr /gradlePV/tmp-gradle-cache "
-                            sh "sleep 60s"
+                        log.info "compiling code + running  tests: "
+                        sh "chmod +x ./gradlew"
+                        sh "mkdir -p /gradlePV/tmp-gradle-cache"
+                        def exists = sh(script: "test -d build-cache && echo '1' || echo '0' ", returnStdout:true).trim()
+                        if (exists == '0'){
                             sh "mkdir build-cache"
-                            sh script: " \\cp -r /gradlePV/tmp-gradle-cache/. build-cache"
+                        }
+                        sh script: " \\cp -r /gradlePV/tmp-gradle-cache/. build-cache"
+                        try {
                             sh  "./gradlew --build-cache test "
                             sh "\\cp -r build-cache/. /gradlePV/tmp-gradle-cache"
                         }
