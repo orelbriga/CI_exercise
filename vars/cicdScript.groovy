@@ -33,7 +33,7 @@ def call () {
                             error("some of the tests have failed - $e ")
                         }
                         finally {
-                            log.info "mounting mosted updated build-cache data on mount path:"
+                            log.info "copying mosted updated build-cache data on mount path:"
                             sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
                             log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
@@ -50,7 +50,7 @@ def call () {
                                               usernameVariable: 'DOCKER_HUB_USER',
                                               passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
                                 sh(
-                                        script: """ ./gradlew jib \
+                                        script: """ ./gradlew jib --build-cache \
                                         -Djib.to.image=${env.REGISTRY}/${env.REPOSITORY}:${env.TAG} \
                                         -Djib.to.auth.username=$DOCKER_HUB_USER \
                                         -Djib.to.auth.password=$DOCKER_HUB_PASSWORD """, returnStdout: true)
@@ -58,6 +58,9 @@ def call () {
                         }
                         catch (e) {
                             error "Failed to build / push the image with Jib plugin due to error: $e"
+                        }
+                        finally {
+                            sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
                         }
                     }
                 }
