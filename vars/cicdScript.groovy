@@ -19,7 +19,10 @@ def call () {
                         try {
                             log.info "compiling code + running  tests: "
                             sh "chmod +x ./gradlew"
+                            sh "mkdir -p gradlePV/tmp-cache"
+                            sh "\'cp -r gradlePV/tmp-cache/* build-cache"
                             sh  "./gradlew --build-cache test "
+                            sh "\'cp -r build-cache/* gradlePV/tmp-cache"
                         }
                         catch (e) {
                             error("some of the tests have failed - $e ")

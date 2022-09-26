@@ -15,7 +15,7 @@ spec:
           memory: "1024Mi"
       volumeMounts:
         - name: gradle-cache
-          mountPath: $PWD/build-cache
+          mountPath: gradlePV/tmp-cache
     - name: docker
       image: docker
       imagePullPolicy: "IfNotPresent"
