@@ -16,22 +16,26 @@ def call () {
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
-                        log.info "compiling code + running  tests: "
-                        sh "chmod +x ./gradlew"
+                        log.info "setting up dir cache: "
                         sh "mkdir -p /gradlePV/tmp-gradle-cache"
                         def exists = sh(script: "test -d build-cache && echo '1' || echo '0' ", returnStdout:true).trim()
                         if (exists == '0'){
                             sh "mkdir build-cache"
                         }
-                        sh script: " \\cp -r /gradlePV/tmp-gradle-cache/. build-cache"
+                        log.info "copying build-cache data from volume:"
+                        sh script: "cp -r /gradlePV/tmp-gradle-cache/. build-cache"
                         try {
+                            log.info "compiling code + running  tests: "
+                            sh "chmod +x ./gradlew"
                             sh  "./gradlew --build-cache test "
-                            sh "\\cp -r build-cache/. /gradlePV/tmp-gradle-cache"
                         }
                         catch (e) {
                             error("some of the tests have failed - $e ")
                         }
                         finally {
+                            log.info "mounting mosted updated build-cache data on mount path:"
+                            sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
+                            log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
                             reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
