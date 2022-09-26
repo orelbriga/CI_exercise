@@ -17,7 +17,7 @@ def call () {
                 stage('Gradle: Tests') {
                     container('gradle') {
                         log.info "using dependency cache dir"
-                        sh "mkdir -p /gradlePV/.gradle"
+                        sh "mkdir -p /gradlePV/.gradle/caches"
                         sh script: "cp -r /gradlePV/.gradle/caches/. ~/.gradle/caches"
                         log.info "setting up dir cache: "
                         sh "mkdir -p /gradlePV/gradle-build-cache"
