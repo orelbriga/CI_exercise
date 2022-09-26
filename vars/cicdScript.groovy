@@ -18,7 +18,7 @@ def call () {
                     container('gradle') {
                         log.info "using dependency cache dir"
                         sh "mkdir -p /gradlePV/.gradle"
-                        sh script: "cp -r /gradlePV/.gradle/. ~/.gradle"
+                        sh script: "cp -r /gradlePV/.gradle/caches/. ~/.gradle/caches"
                         log.info "setting up dir cache: "
                         sh "mkdir -p /gradlePV/gradle-build-cache"
                         def exists = sh(script: "test -d build-cache && echo '1' || echo '0' ", returnStdout:true).trim()
@@ -40,7 +40,7 @@ def call () {
                             log.info "copying most updated build-cache data to mount path:"
                             sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
                             log.info "copying most updated dependency cache dir to mount path:"
-                            sh "cp -r ~/.gradle/. /gradlePV/.gradle"
+                            sh "cp -r ~/.gradle/caches/. /gradlePV/.gradle/caches"
                             log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
