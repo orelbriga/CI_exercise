@@ -21,9 +21,9 @@ def call () {
                             sh "chmod +x ./gradlew"
                             sh "mkdir -p /gradlePV/tmp-gradle-cache"
                             sh "mkdir build-cache"
-                            sh script: " \\cp -r /gradlePV/tmp-gradle-cache/* build-cache"
+                            sh script: " \\cp -r /gradlePV/tmp-gradle-cache/ build-cache"
                             sh  "./gradlew --build-cache test "
-                            sh "\\cp -r build-cache/* /gradlePV/tmp-gradle-cache"
+                            sh "\\cp -r build-cache/ /gradlePV/tmp-gradle-cache"
                         }
                         catch (e) {
                             error("some of the tests have failed - $e ")
