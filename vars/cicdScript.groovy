@@ -17,16 +17,16 @@ def call () {
                 stage('Gradle: Tests') {
                     container('gradle') {
                         log.info "using dependency cache dir"
-                        sh "mkdir -p /gradlePV/.gradle/caches"
-                        sh script: "cp -r /gradlePV/.gradle/caches/. ~/.gradle/caches"
+                        sh "mkdir -p /gradlePV/gradle-cache/.gradle/caches"
+                        sh script: "cp -r /gradlePV/gradle-cache/.gradle/caches/. ~/.gradle/caches"
                         log.info "setting up dir cache: "
-                        sh "mkdir -p /gradlePV/gradle-build-cache"
+                        sh "mkdir -p /gradlePV/gradle-cache/gradle-build-cache"
                         def exists = sh(script: "test -d build-cache && echo '1' || echo '0' ", returnStdout:true).trim()
                         if (exists == '0'){
                             sh "mkdir build-cache"
                         }
                         log.info "copying build-cache data from volume:"
-                        sh script: "cp -r /gradlePV/gradle-build-cache/. build-cache"
+                        sh script: "cp -r /gradlePV/gradle-cache/gradle-build-cache/. build-cache"
 
                         try {
                             log.info "compiling code + running  tests: "
@@ -38,9 +38,9 @@ def call () {
                         }
                         finally {
                             log.info "copying most updated build-cache data to mount path:"
-                            sh "cp -r build-cache/. /gradlePV/gradle-build-cache"
+                            sh "cp -r build-cache/. /gradlePV/gradle-cache/gradle-build-cache"
                             log.info "copying most updated dependency cache dir to mount path:"
-                            sh "cp -r ~/.gradle/caches/. /gradlePV/.gradle/caches"
+                            sh "cp -r ~/.gradle/caches/. /gradlePV/gradle-cache/.gradle/caches"
                             log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
