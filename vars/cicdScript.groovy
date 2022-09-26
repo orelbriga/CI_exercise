@@ -16,14 +16,18 @@ def call () {
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
+                        log.info "using dependency cache dir"
+                        sh "mkdir -p /gradlePV/.gradle"
+                        sh script: "cp -r /gradlePV/.gradle/. ~/.gradle"
                         log.info "setting up dir cache: "
-                        sh "mkdir -p /gradlePV/tmp-gradle-cache"
+                        sh "mkdir -p /gradlePV/gradle-build-cache"
                         def exists = sh(script: "test -d build-cache && echo '1' || echo '0' ", returnStdout:true).trim()
                         if (exists == '0'){
                             sh "mkdir build-cache"
                         }
                         log.info "copying build-cache data from volume:"
-                        sh script: "cp -r /gradlePV/tmp-gradle-cache/. build-cache"
+                        sh script: "cp -r /gradlePV/gradle-build-cache/. build-cache"
+
                         try {
                             log.info "compiling code + running  tests: "
                             sh "chmod +x ./gradlew"
@@ -33,8 +37,10 @@ def call () {
                             error("some of the tests have failed - $e ")
                         }
                         finally {
-                            log.info "copying mosted updated build-cache data on mount path:"
+                            log.info "copying most updated build-cache data to mount path:"
                             sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
+                            log.info "copying most updated dependency cache dir to mount path:"
+                            sh "cp -r ~/gradle/. /gradlePV/.gradle"
                             log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
