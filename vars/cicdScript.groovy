@@ -18,8 +18,8 @@ def call () {
                     container('gradle') {
                         try {
                             log.info "compiling code + running  tests: "
-                            sh """chmod +x ./gradlew
-                                 ./gradlew --build-cache test """
+                            sh "chmod +x ./gradlew"
+                            sh  "./gradlew --build-cache test "
                         }
                         catch (e) {
                             error("some of the tests have failed - $e ")
