@@ -50,7 +50,7 @@ def call () {
                                               usernameVariable: 'DOCKER_HUB_USER',
                                               passwordVariable: 'DOCKER_HUB_PASSWORD']]) {
                                 sh(
-                                        script: """ ./gradlew jib --build-cache \
+                                        script: """ ./gradlew jib \
                                         -Djib.to.image=${env.REGISTRY}/${env.REPOSITORY}:${env.TAG} \
                                         -Djib.to.auth.username=$DOCKER_HUB_USER \
                                         -Djib.to.auth.password=$DOCKER_HUB_PASSWORD """, returnStdout: true)
