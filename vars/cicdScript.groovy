@@ -38,7 +38,7 @@ def call () {
                         }
                         finally {
                             log.info "copying most updated build-cache data to mount path:"
-                            sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
+                            sh "cp -r build-cache/. /gradlePV/gradle-build-cache"
                             log.info "copying most updated dependency cache dir to mount path:"
                             sh "cp -r ~/.gradle/caches/. /gradlePV/.gradle/caches"
                             log.info "creating Junit report based on test results + HTML Report"
