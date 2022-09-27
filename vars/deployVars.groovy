@@ -32,8 +32,10 @@ def getAppLogs() {
 
 }
 
-podState = sh(script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
+def podState() {
+    sh(script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
             returnStdout: true).trim()
+}
 
 def getRequest(Map config = [:]) {
     def CLUSTER_HOST_IP = clusterHostIP()
@@ -56,10 +58,10 @@ def getRequest(Map config = [:]) {
 def checkPodState() {
     // def APP_POD_NAME = appName()
     // def POD_STATE = podState()
-    if (!podState.equals("Running")) {
+    if (!podState().equals("Running")) {
         error("Application pod ${appName()} is not healthy, check app log")
     }
     else {
-        log.info "Application pod ${appName()} is in ${podState} state!"
+        log.info "Application pod ${appName()} is in ${podState()} state!"
     }
 }
