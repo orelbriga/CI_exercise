@@ -26,9 +26,9 @@ def nodePort() {
     ).trim()
 }
 
-def getAppLogs(Map config = [:]) {
-    def APP = config.appName ?: appName()
-    sh "./kubectl logs ${APP} | tee ${APP}.log"
+def getAppLogs() {
+    // def APP = config.appName ?: appName()
+    sh (script: "./kubectl logs ${appName()} | tee ${appName()}.log")
 
 }
 
@@ -58,12 +58,12 @@ def getRequest(Map config = [:]) {
 }
 
 def checkPodState() {
-    def APP_POD_NAME = appName()
-    def POD_STATE = podState()
+    // def APP_POD_NAME = appName()
+    // def POD_STATE = podState()
     if (!POD_STATE.equals("Running")) {
-        error("Application pod ${APP_POD_NAME} is not healthy, check app log")
+        error("Application pod ${appName()} is not healthy, check app log")
     }
     else {
-        log.info "Application pod ${APP_POD_NAME} is in ${POD_STATE} state!"
+        log.info "Application pod ${appName()} is in ${podState()} state!"
     }
 }

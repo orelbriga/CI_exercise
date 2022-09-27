@@ -65,9 +65,6 @@ def call () {
                         catch (e) {
                             error "Failed to build / push the image with Jib plugin due to error: $e"
                         }
-                        finally {
-                            sh "cp -r build-cache/. /gradlePV/tmp-gradle-cache"
-                        }
                     }
                 }
                 stage('Deploy app to k8s') {
