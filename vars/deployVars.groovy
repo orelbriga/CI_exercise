@@ -32,7 +32,7 @@ def getAppLogs() {
 
 }
 
-def podState = sh(script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
+podState = sh(script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
             returnStdout: true).trim()
 
 def getRequest(Map config = [:]) {
