@@ -4,12 +4,11 @@ def downloadKubectl(Map config = [:]) {
            chmod +x ./kubectl"""
 }
 
-def appName() {
-    sh(
+appName = sh(
             script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
-}
+
 
 def clusterHostIP() {
     sh(
@@ -28,7 +27,7 @@ def nodePort() {
 
 def getAppLogs() {
     // def APP = config.appName ?: appName()
-    sh (script: "./kubectl logs ${appName()} | tee ${appName()}.log")
+    sh (script: "./kubectl logs ${appName} | tee ${appName}.log")
 
 }
 
