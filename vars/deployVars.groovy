@@ -60,6 +60,6 @@ def checkPodState() {
         error("Application pod ${appName()} is not healthy, check app log")
     }
     else {
-        log.info "Application pod ${appName()} is in ${podState()} state!"
+        log.info "Application pod ${appName()} is in ${podState} state!"
     }
 }
