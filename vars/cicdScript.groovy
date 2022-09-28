@@ -9,7 +9,7 @@ def call () {
         node(POD_LABEL) {
             try {
                 stage('Git checkout') {
-                    container('gradle') {
+                    container('jnlp') {
                         checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH}"]], userRemoteConfigs: [[credentialsId: 'github-private',\
                                   url: 'https://github.com/orelbriga/hello-world.git']]])
                     }
