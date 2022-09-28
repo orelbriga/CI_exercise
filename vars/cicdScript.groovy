@@ -10,7 +10,7 @@ def call () {
             try {
                 stage('Git checkout') {
                     container('jnlp') {
-                        checkout([$class: 'GitSCM', branches: [[name: "*/${BRANCH}"]], userRemoteConfigs: [[credentialsId: 'github-private',\
+                        checkout([$class: 'GitSCM', branches: [[name: "*/${params.BRANCH}"]], userRemoteConfigs: [[credentialsId: 'github-private',\
                                   url: 'https://github.com/orelbriga/hello-world.git']]])
                     }
                 }
