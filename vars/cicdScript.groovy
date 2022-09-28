@@ -15,7 +15,7 @@ def call () {
                 stage('Gradle: Tests') {
                     container('gradle') {
                         sh "mkdir -p /gradlePV/gradle-cache/.gradle/caches"
-                        if (${params.CACHE}) {
+                        if (params.CACHE) {
                             log.info "copying gradle cache from PV"
                             sh "cp -r /gradlePV/gradle-cache/.gradle/caches/. ~/.gradle/caches"
                         }
