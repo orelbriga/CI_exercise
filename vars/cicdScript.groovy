@@ -14,10 +14,12 @@ def call () {
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
-                        log.info "copying gradle cache from volume"
                         sh "mkdir -p /gradlePV/gradle-cache/.gradle/caches"
-                        sh "cp -r /gradlePV/gradle-cache/.gradle/caches/. ~/.gradle/caches"
-                        log.info "copying build-cache data from volume:"
+                        if (${params.CACHE}) {
+                            log.info "copying gradle cache from PV"
+                            sh "cp -r /gradlePV/gradle-cache/.gradle/caches/. ~/.gradle/caches"
+                        }
+                        log.info "copying build-cache data from PV:"
                         sh "mkdir -p /gradlePV/gradle-cache/gradle-build-cache"
                         def exists = sh(script: "test -d build-cache && echo '1' || echo '0'", returnStdout:true).trim()
                         if (exists == '0'){
@@ -34,7 +36,7 @@ def call () {
                             error("some of the tests have failed - $e ")
                         }
                         finally {
-                            log.info "copying most updated build-cache data to mount path:"
+                            log.info "copying most updated build-cache data to mounted path:"
                             sh "cp -r build-cache/. /gradlePV/gradle-cache/gradle-build-cache"
                             log.info "copying most updated gradle cache data to mount path:"
                             sh "cp -r ~/.gradle/caches/. /gradlePV/gradle-cache/.gradle/caches"
