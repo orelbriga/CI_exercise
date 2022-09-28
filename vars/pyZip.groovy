@@ -9,6 +9,7 @@ def call() {
                     stage('Run py script') {
                         container('centospy') {
                             try {
+                                log.info "running py script"
                                 sh 'python3 /tmp/zip_job.py'
                                 archiveArtifacts artifacts: '*.zip', onlyIfSuccessful: true
                             }
