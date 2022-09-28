@@ -14,15 +14,15 @@ def getRequest(Map config = [:]) {
             script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
             returnStdout: true).trim()
 
-    def CLUSTER_HOST_IP = clusterHostIP
+    // def CLUSTER_HOST_IP = clusterHostIP
     def IP = config.clusterHostIP ?: clusterHostIP
-    def NODE_PORT = nodePort
-    def PORT = config.nodePort ?: NODE_PORT
+    // def NODE_PORT = nodePort
+    def PORT = config.nodePort ?: nodePort
     log.info "Sending GET request to the application: "
     retry(3) {
         try {
             sh "sleep 5s"
-            def RESPONSE = httpRequest url: "http://${IP}:${PORT}"
+            def RESPONSE = httpRequest timeout:10, url: "http://${IP}:${PORT}"
             log.info "Content: " + RESPONSE.content
         }
         catch (e) {
@@ -41,9 +41,7 @@ def appName() {
 
 
 def getAppLogs() {
-    // def APP = config.appName ?: appName()
     sh (script: "./kubectl logs ${appName()} | tee ${appName()}.log")
-
 }
 
 

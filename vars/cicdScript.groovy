@@ -84,8 +84,8 @@ def call () {
                                     archiveArtifacts artifacts: "${env.IMAGE_NAME}-*.log"
                                     deployVars.checkPodState()
                                 }
+                                buildResult = "SUCCESS"
                             }
-                            buildResult = "SUCCESS"
                         }
                         catch (e) {
                             buildResult = "FAILURE"
