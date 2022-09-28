@@ -19,7 +19,7 @@ def call () {
                         sh "cp -r /gradlePV/gradle-cache/.gradle/caches/. ~/.gradle/caches"
                         log.info "copying build-cache data from volume:"
                         sh "mkdir -p /gradlePV/gradle-cache/gradle-build-cache"
-                        def exists = sh(script: "test -d build-cache && echo '1' || echo '0' ", returnStdout:true).trim()
+                        def exists = sh(script: "test -d build-cache && echo '1' || echo '0'", returnStdout:true).trim()
                         if (exists == '0'){
                             sh "mkdir build-cache"
                         }
@@ -74,7 +74,17 @@ def call () {
                     container('docker') {
                         try {
                             log.info "Running deployment tests"
-                            deployTests()
+                            script {
+                                withKubeConfig([credentialsId: 'secret-jenkins']) {
+                                    log.info "installing kubectl on the container to check the application's pod state + logs:"
+                                    deployVars.downloadKubectl(version: "1.24.1")
+                                    deployVars.getRequest()
+                                    sh "sleep 3s"
+                                    deployVars.getAppLogs()
+                                    archiveArtifacts artifacts: "${env.IMAGE_NAME}-*.log"
+                                    deployVars.checkPodState()
+                                }
+                            }
                             buildResult = "SUCCESS"
                         }
                         catch (e) {
@@ -85,7 +95,13 @@ def call () {
                             if (buildResult == 'SUCCESS') {
                                 log.info "Deployment tests passed successfully"
                                 log.info "Cleanup: Terminate the app + delete unused image"
-                                deployCleanup()
+                                withKubeConfig([credentialsId: 'secret-jenkins']) {
+                                    log.info "Terminating the app: "
+                                    sh "./kubectl delete deployment,services -l app=${env.IMAGE_NAME}-${env.TAG}"
+                                    sh "sleep 3s"
+                                    log.info "Delete unused app image: "
+                                    sh "docker image rmi -f ${env.REPOSITORY}:${env.TAG}"
+                                }
                             }
                             else {
                                 log.info "keeping the app alive for investigation"
