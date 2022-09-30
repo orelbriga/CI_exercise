@@ -73,7 +73,7 @@ def call () {
                     container('docker') {
                         log.info "deploy the app to the k8s cluster using yaml files - with kube-config as an authenticator: "
                         // kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
-                        kubernetesDeploy(configs: "/gradlePV/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/libs/*/resources/config.yaml", kubeconfigId: 'k8sconfig')
+                        kubernetesDeploy(configs: "/gradlePV/jobs/${env.JOB_NAME}/builds/${env.BUILD_NUMBER}/libs/**/resources/config.yaml", kubeconfigId: 'k8sconfig')
                         // kubernetesDeploy(configs: libraryResource('config.yaml'), kubeconfigId: 'k8sconfig')
                     }
                 }
