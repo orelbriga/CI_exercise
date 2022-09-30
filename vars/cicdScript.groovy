@@ -89,15 +89,15 @@ def call () {
                                     archiveArtifacts artifacts: "${env.IMAGE_NAME}-*.log"
                                     deployVars.checkPodState()
                                 }
-                                buildResult = "SUCCESS"
                             }
                         }
                         catch (e) {
-                            buildResult = "FAILURE"
+                            currentBuild.result = "FAILURE"
+                            echo "RESULT: ${currentBuild.result}"
                             error  "Deployment tests failed due to the error: ${e}"
                         }
                         finally {
-                            if (buildResult == 'SUCCESS') {
+                            if (currentBuild.result != "SUCCESS") {
                                 log.info "Deployment tests passed successfully"
                                 log.info "Cleanup: Terminate the app + delete unused image"
                                 withKubeConfig([credentialsId: 'secret-jenkins']) {
