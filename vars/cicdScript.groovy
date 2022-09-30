@@ -98,7 +98,7 @@ def call () {
                         }
                         finally {
                             echo "RESULT: ${currentBuild.result}"
-                            if (currentBuild.result != "SUCCESS") {
+                            if (currentBuild.result != "FAILURE" && currentBuild.result != "ABORTED") {
                                 log.info "Deployment tests passed successfully"
                                 log.info "Cleanup: Terminate the app + delete unused image"
                                 withKubeConfig([credentialsId: 'secret-jenkins']) {
