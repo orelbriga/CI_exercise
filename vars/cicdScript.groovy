@@ -73,7 +73,7 @@ def call () {
                     container('docker') {
                         log.info "copying yaml file from shared library to the workspace"
                         def deployYaml = libraryResource('com/ci-task/hello-world-pipeline/config.yaml')
-                        sh script: "echo \"${deployYaml}\" > ${env.WORKSPACE}/config.yaml ", returnStdout: true
+                        sh script: "echo \"${deployYaml}\" > ${env.WORKSPACE}/config.yaml "
                         log.info "deploy the app to the k8s cluster with kube-config as an authenticator: "
                         kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
                     }
