@@ -74,8 +74,9 @@ def call () {
                         log.info "deploy the app to the k8s cluster using yaml files - with kube-config as an authenticator: "
                         // kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
                         // def deployYaml = libraryResource('config.yaml')
-                        def deployYaml = readYaml(file: libraryResource('config.yaml'))
-                        sh "echo $deployYaml"
+                        def deployYaml = libraryResource('config.yaml')
+                        echo "content is ${deployYaml}"
+                        log.info "creating config1.yaml"
                         sh script: "echo ${deployYaml} > ${env.WORKSPACE}/config1.yaml ", returnStdout: true
                         kubernetesDeploy(configs: 'config1.yaml', kubeconfigId: 'k8sconfig')
                     }
