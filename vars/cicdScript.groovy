@@ -71,14 +71,11 @@ def call () {
                 }
                 stage('Deploy app to k8s') {
                     container('docker') {
-                        log.info "deploy the app to the k8s cluster using yaml files - with kube-config as an authenticator: "
-                        // kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
-                        // def deployYaml = libraryResource('config.yaml')
-                        def deployYaml = libraryResource('config.yaml')
-                        echo "content is ${deployYaml}"
-                        log.info "creating config1.yaml"
-                        sh script: "echo \"${deployYaml}\" > ${env.WORKSPACE}/config1.yaml ", returnStdout: true
-                        kubernetesDeploy(configs: 'config1.yaml', kubeconfigId: 'k8sconfig')
+                        log.info "copying yaml file from shared library to the workspace"
+                        def deployYaml = libraryResource('com/ci-task/hello-world-pipeline/config.yaml')
+                        sh script: "echo \"${deployYaml}\" > ${env.WORKSPACE}/config.yaml ", returnStdout: true
+                        log.info "deploy the app to the k8s cluster with kube-config as an authenticator: "
+                        kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
                     }
                 }
                 stage('Deployment Tests') {
