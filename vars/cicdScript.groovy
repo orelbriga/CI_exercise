@@ -76,8 +76,7 @@ def call () {
                         // def deployYaml = libraryResource('config.yaml')
                         def deployYaml = readYaml(file: libraryResource('config.yaml'))
                         sh "echo $PWD"
-                        sh script: "echo ${deployYaml} > config1.yaml "
-                        sh "echo $PWD"
+                        sh script: "echo ${deployYaml} > ${env.WORKSPACE}/config1.yaml "
                         kubernetesDeploy(configs: 'config1.yaml', kubeconfigId: 'k8sconfig')
                     }
                 }
