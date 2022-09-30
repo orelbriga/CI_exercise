@@ -3,22 +3,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: $IMAGE_NAME-$TAG
+  name: hello-world-app-777
   labels:
-    app: $IMAGE_NAME-$TAG
+    app: hello-world-app-777
 spec:
   selector:
     matchLabels:
-      app: $IMAGE_NAME-$TAG
+      app: hello-world-app-777
   replicas: 1
   template:
     metadata:
       labels:
-        app: $IMAGE_NAME-$TAG
+        app: hello-world-app-777
     spec:
       containers:
-        - name: $IMAGE_NAME-$TAG
-          image: $REPOSITORY:$TAG
+        - name: hello-world-app-777
+          image: docker.io/orelbriga/hello-world-app:777
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
@@ -29,12 +29,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: $IMAGE_NAME-svc-$TAG
+  name: hello-world-app-svc-777
   labels:
-    app: $IMAGE_NAME-$TAG
+    app: hello-world-app-777
 spec:
   selector:
-    app: $IMAGE_NAME-$TAG
+    app: hello-world-app-777
   ports:
     - protocol: "TCP"
       port: 8080
