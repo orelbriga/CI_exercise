@@ -72,7 +72,7 @@ def call () {
                 stage('Deploy app to k8s') {
                     container('docker') {
                         log.info "deploy the app to the k8s cluster using yaml files - with kube-config as an authenticator: "
-                        kubernetesDeploy(configs: libraryResource('com/ci-task/hello-world-pipeline/config.yaml'), kubeconfigId: 'k8sconfig')
+                        kubernetesDeploy(configs: (libraryResource('com/ci-task/hello-world-pipeline/config.yaml')), kubeconfigId: 'k8sconfig')
                     }
                 }
                 stage('Deployment Tests') {
