@@ -14,8 +14,9 @@ def call () {
                 }
                 stage('Gradle: Tests') {
                     container('gradle') {
-                        sh "mkdir -p /gradlePV/gradle-cache/.gradle/caches"
                         if (params.CACHE) {
+                            log.info "setting up gradle-cache for 'CACHE' use-case"
+                            sh "mkdir -p /gradlePV/gradle-cache/.gradle/caches"
                             log.info "copying gradle cache from PV"
                             sh "cp -r /gradlePV/gradle-cache/.gradle/caches/. ~/.gradle/caches"
                         }
@@ -38,8 +39,10 @@ def call () {
                         finally {
                             log.info "copying most updated build-cache data to mounted path:"
                             sh "cp -r build-cache/. /gradlePV/gradle-cache/gradle-build-cache"
-                            log.info "copying most updated gradle cache data to mount path:"
-                            sh "cp -r ~/.gradle/caches/. /gradlePV/gradle-cache/.gradle/caches"
+                            if (params.CACHE) {
+                                log.info "copying most updated gradle cache data to mount path:"
+                                sh "cp -r ~/.gradle/caches/. /gradlePV/gradle-cache/.gradle/caches"
+                            }
                             log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\

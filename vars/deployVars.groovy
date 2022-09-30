@@ -14,10 +14,8 @@ def getRequest(Map config = [:]) {
             script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
             returnStdout: true).trim()
 
-    // def CLUSTER_HOST_IP = clusterHostIP
-    def IP = config.clusterHostIP ?: clusterHostIP
-    // def NODE_PORT = nodePort
-    def PORT = config.nodePort ?: nodePort
+    def IP = config.IP ?: clusterHostIP
+    def PORT = config.PORT ?: nodePort
     log.info "Sending GET request to the application: "
     retry(3) {
         try {
