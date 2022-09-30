@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: $IMAGE_NAME-$TAG
-          image: $REPOSITORY:$TAG
+          image: ${env.REPOSITORY}:${env.TAG}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
