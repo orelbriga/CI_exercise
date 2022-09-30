@@ -75,7 +75,8 @@ def call () {
                         // kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
                         // def deployYaml = libraryResource('config.yaml')
                         def deployYaml = libraryResource 'config.yaml'
-                        kubernetesDeploy(configs: deployYaml, kubeconfigId: 'k8sconfig')
+                        sh script: "echo ${deployYaml} > config1.yaml "
+                        kubernetesDeploy(configs: 'config1.yaml', kubeconfigId: 'k8sconfig')
                     }
                 }
                 stage('Deployment Tests') {
