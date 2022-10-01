@@ -44,7 +44,7 @@ def call () {
                             log.info "creating Junit report based on test results + HTML Report"
                             junit 'build/test-results/test/*.xml'
                             publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'build/reports/tests/test',\
-                            reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: '', useWrapperFileDirectly: true])
+                            reportFiles: 'index.html', reportName: 'HTML Report', reportTitles: ''])
                         }
                     }
                 }
