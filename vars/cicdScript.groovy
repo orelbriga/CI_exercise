@@ -1,6 +1,6 @@
 def call () {
     env.REPOSITORY = env.REGISTRY_USER+"/"+env.IMAGE_NAME
-    env.TAG = $env.BUILD_NUMBER
+    env.TAG = ${env.BUILD_NUMBER}
     def POD_LABEL = "agent-${env.JOB_NAME}-${env.BUILD_NUMBER}"
     podTemplate(label: POD_LABEL,  yaml: libraryResource('com/ci-task/podTemplates/agent-ci-cd.yaml'))
     {
