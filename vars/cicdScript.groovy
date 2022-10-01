@@ -73,7 +73,17 @@ def call () {
                         String deployYaml = libraryResource('com/ci-task/hello-world-pipeline/config.yaml')
                         sh script: "echo \"${deployYaml}\" > ${env.WORKSPACE}/config.yaml "
                         log.info "deploy the app to the k8s cluster with kube-config as an authenticator: "
-                        kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
+                        timeout (time: 30, unit: 'SECONDS') {
+                            retry(2) {
+                                try {
+                                    sh "sleep 3s"
+                                    kubernetesDeploy(configs: 'config.yaml', kubeconfigId: 'k8sconfig')
+                                }
+                                catch (e) {
+                                    error "failed to deploy the app - error: $e"
+                                }
+                            }
+                        }
                     }
                 }
                 stage('Deployment Tests') {
