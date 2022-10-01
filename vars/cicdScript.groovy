@@ -3,7 +3,6 @@ def call () {
     env.TAG = "${env.BUILD_NUMBER}"
     String buildResult
 
-    def POD_LABEL = "agent-${env.JOB_NAME}-${env.BUILD_NUMBER}"
     podTemplate(label: POD_LABEL,  yaml: libraryResource('com/ci-task/podTemplates/agent-ci-cd.yaml'))
     {
         node(POD_LABEL) {
