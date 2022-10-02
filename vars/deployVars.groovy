@@ -30,27 +30,24 @@ def getRequest(Map config = [:]) {
 }
 
 
-def appName() {
-    sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
-            returnStdout: true
-    ).trim()
-}
-
-
 def getAppLogs() {
-    sh (script: "./kubectl logs ${appName()} | tee ${appName()}.log")
+    sh (script: "./kubectl logs deploy/${env.IMAGE_NAME}-${env.TAG} | tee ${env.IMAGE_NAME}-${env.TAG}.log")
 }
 
 
 def checkPodState() {
+    def podName = sh(
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
+            returnStdout: true
+    ).trim()
+
     def podState = sh(
             script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
             returnStdout: true).trim()
-    if (!podState.equals("Running")) {
-        error("Application pod ${appName()} is not healthy, check app log")
+    if (podState != "Running") {
+        error("Application pod ${podName} is not healthy, check app log")
     }
     else {
-        log.info "Application pod ${appName()} is in ${podState} state!"
+        log.info "Application pod ${podName} is in ${podState} state!"
     }
 }
