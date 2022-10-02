@@ -104,11 +104,9 @@ def call () {
                         }
                         catch (e) {
                             currentBuild.result = "FAILURE"
-                            echo "RESULT: ${currentBuild.result}"
                             error  "Deployment tests failed due to the error: ${e}"
                         }
                         finally {
-                            echo "RESULT: ${currentBuild.result}"
                             if (currentBuild.result != "FAILURE") {
                                 log.info "Deployment tests passed successfully"
                                 log.info "Cleanup: Terminate the app + delete unused image"
