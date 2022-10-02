@@ -97,7 +97,7 @@ def call () {
                                     deployVars.getRequest()
                                     sh "sleep 3s"
                                     deployVars.getAppLogs()
-                                    archiveArtifacts artifacts: "${env.IMAGE_NAME}-*.log"
+                                    archiveArtifacts artifacts: "*.log"
                                     deployVars.checkPodState()
                                 }
                             }
