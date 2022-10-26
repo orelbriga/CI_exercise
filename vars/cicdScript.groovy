@@ -106,22 +106,22 @@ def call () {
                             currentBuild.result = "FAILURE"
                             error  "Deployment tests failed due to the error: ${e}"
                         }
-//                        finally {
-//                            if (currentBuild.result != "FAILURE") {
-//                                log.info "Deployment tests passed successfully"
-//                                log.info "Cleanup: Terminate the app + delete unused image"
-//                                withKubeConfig([credentialsId: 'secret-jenkins']) {
-//                                    log.info "Terminating the app: "
-//                                    sh "./kubectl delete deployment,services -l app=${env.IMAGE_NAME}-${env.TAG}"
-//                                    sh "sleep 3s"
-//                                    log.info "Delete unused app image: "
-//                                    sh "docker image rmi -f ${env.REPOSITORY}:${env.TAG}"
-//                                }
-//                            }
-//                            else {
-//                                log.info "keeping the app alive for investigation"
-//                            }
-//                        }
+                        finally {
+                            if (currentBuild.result != "FAILURE") {
+                                log.info "Deployment tests passed successfully"
+                                log.info "Cleanup: Terminate the app + delete unused image"
+                                withKubeConfig([credentialsId: 'secret-jenkins']) {
+                                    log.info "Terminating the app: "
+                                    sh "./kubectl delete deployment,services -l app=${env.IMAGE_NAME}-${env.TAG}"
+                                    sh "sleep 3s"
+                                    log.info "Delete unused app image: "
+                                    sh "docker image rmi -f ${env.REPOSITORY}:${env.TAG}"
+                                }
+                            }
+                            else {
+                                log.info "keeping the app alive for investigation"
+                            }
+                        }
                     }
                 }
             }
