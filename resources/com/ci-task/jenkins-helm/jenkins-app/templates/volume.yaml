@@ -1,35 +1,37 @@
 # Persistent Volume
----
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: jenkins-pv
-  namespace: ci
+  name: {{ .Values.persistentVolume.name }}
+  namespace: {{ .Release.Namespace }}
 spec:
-  storageClassName: local-storage
+  storageClassName: {{ .Values.persistentVolume.storageClassName }}
   accessModes:
     - ReadWriteOnce
   capacity:
-    storage: 20Gi
+    storage: {{ .Values.persistentVolume.capacity.storage }}
   persistentVolumeReclaimPolicy: Delete
   hostPath:
-    path: /data/jenkins-volume/
+    path: {{ .Values.persistentVolume.hostPath.path }}
   claimRef:
-    namespace: ci
-    name: jenkins-pv-claim
+    namespace: {{ .Release.Namespace }}
+    name: {{ .Values.persistentVolumeClaim.name }}
 
 
-# Persistent Volume Claim
 ---
+#PVC
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: jenkins-pv-claim
-  namespace: ci
+  name: {{ .Values.persistentVolumeClaim.name }}
+  namespace: {{ .Release.Namespace }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    - {{ .Values.persistentVolumeClaim.accessModes }}
   resources:
     requests:
-      storage: 20Gi
+      storage: {{ .Values.persistentVolumeClaim.resources.requests.storage }}
+
+
+
 

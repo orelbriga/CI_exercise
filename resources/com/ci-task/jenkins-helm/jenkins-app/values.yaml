@@ -1,0 +1,48 @@
+# values.yaml for Jenkins Helm chart
+
+# Number of replicas for Jenkins Deployment
+replicas: 1
+
+# Docker image for Jenkins container
+image:
+  repository: jenkins/jenkins
+  tag: lts
+
+# Resource limits and requests for Jenkins container
+resources:
+  limits:
+    memory: "2Gi"
+    cpu: "1000m"
+  requests:
+    memory: "500Mi"
+    cpu: "500m"
+
+
+# Volume mounts and volumes for persistent storage
+volumeMountPath: "/var/jenkins_home"
+volumeClaimName: "jenkins-pv-claim"
+
+# Serivce type and ports for Jenkins HTTP and JNLP connections
+service:
+  type: NodePort
+  httpPort: 8080
+  jnlpPort: 50000
+  nodePort: 32000
+
+# Persistent Volume
+persistentVolume:
+  name: jenkins-pv
+  storageClassName: local-storage
+  capacity:
+    storage: 20Gi
+  hostPath:
+    path: /data/jenkins-volume/
+
+# Persistent Volume Claim
+persistentVolumeClaim:
+  name: jenkins-pv-claim
+  accessModes: ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+

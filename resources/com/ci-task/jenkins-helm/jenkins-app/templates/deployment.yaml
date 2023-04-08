@@ -4,11 +4,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: jenkins-deployment
-  namespace: ci
+  namespace: {{ .Release.Namespace }}
   labels:
     app: jenkins
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicas }}
   selector:
     matchLabels:
       app: jenkins
@@ -26,10 +26,10 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             nodeSelectorTerms:
               - matchExpressions:
-                - key: kubernetes.io/hostname
-                  operator: In
-                  values:
-                    - jenkins-node
+                  - key: kubernetes.io/hostname
+                    operator: In
+                    values:
+                      - jenkins-node
       tolerations:
         - key: node-type
           operator: Equal
@@ -37,24 +37,23 @@ spec:
           effect: NoSchedule
       containers:
         - name: jenkins
-          image: jenkins/jenkins:lts
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           resources:
             limits:
-              memory: "2Gi"
-              cpu: "1000m"
+              memory: {{ .Values.resources.limits.memory }}
+              cpu: {{ .Values.resources.limits.cpu }}
             requests:
-              memory: "500Mi"
-              cpu: "500m"
+              memory: {{ .Values.resources.requests.memory }}
+              cpu: {{ .Values.resources.requests.cpu }}
           ports:
             - name: httpport
-              containerPort: 8080
+              containerPort: {{ .Values.service.httpPort }}
             - name: jnlpport
-              containerPort: 50000
+              containerPort: {{ .Values.service.jnlpPort }}
           volumeMounts:
             - name: jenkins-data
-              mountPath: /var/jenkins_home
+              mountPath: {{ .Values.volumeMountPath }}
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
-            claimName: jenkins-pv-claim
-
+            claimName: {{ .Values.volumeClaimName }}
