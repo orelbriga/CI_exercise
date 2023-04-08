@@ -93,7 +93,7 @@ def call () {
                             script {
                                 withKubeConfig([credentialsId: 'secret-jenkins']) {
                                     log.info "installing kubectl on the container to check the application's pod state + logs:"
-                                    deployVars.downloadKubectl(version: "1.24.1")
+                                    deployVars.downloadKubectl(version: "1.26.3")
                                     deployVars.getRequest()
                                     sh "sleep 3s"
                                     deployVars.getAppLogs()
