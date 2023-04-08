@@ -7,8 +7,8 @@ def downloadKubectl(Map config = [:]) {
 
 def getRequest(Map config = [:]) {
     def clusterHostIP = sh(
-            script: "./kubectl get pod -n kube-system \$(./kubectl get po -n kube-system | grep dns \
-                            | awk \'{print \$1}\') -o=jsonpath=\'{.status.hostIP}\' ", returnStdout: true).trim()
+            script: "./kubectl get nodes -o jsonpath='{.items[0].status.addresses[?(@.type==\"InternalIP\")].address}'",
+            returnStdout: true).trim()
 
     def nodePort = sh(
             script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
