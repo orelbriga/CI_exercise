@@ -1,0 +1,35 @@
+# Persistent Volume
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: jenkins-pv
+  namespace: ci
+spec:
+  storageClassName: local-storage
+  accessModes:
+    - ReadWriteOnce
+  capacity:
+    storage: 20Gi
+  persistentVolumeReclaimPolicy: Delete
+  hostPath:
+    path: /data/jenkins-volume/
+  claimRef:
+    namespace: ci
+    name: jenkins-pv-claim
+
+
+# Persistent Volume Claim
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: jenkins-pv-claim
+  namespace: ci
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 20Gi
+

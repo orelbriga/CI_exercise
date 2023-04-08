@@ -1,0 +1,20 @@
+# Service Config
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: jenkins-service
+  namespace: ci
+spec:
+  selector:
+    app: jenkins
+  type: NodePort
+  ports:
+    - name: httpport
+      port: 8080
+      targetPort: 8080
+      nodePort: 32000
+    - name: jnlpport
+      port: 50000
+      targetPort: 50000
+
