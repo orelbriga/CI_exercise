@@ -91,10 +91,10 @@ def call () {
                         try {
                             log.info "Running deployment tests"
                             script {
-                                withKubeConfig([credentialsId: 'secret-jenkins']) {
+                                withKubeConfig([credentialsId: 'secret-jenkins', serviceAccount: 'ci:jenkins-admin']) {
                                     log.info "installing kubectl on the container to check the application's pod state + logs:"
                                     deployVars.downloadKubectl(version: "1.26.3")
-                                    deployVars.getRequest()
+                                    // deployVars.getRequest()
                                     sh "sleep 3s"
                                     deployVars.getAppLogs()
                                     archiveArtifacts artifacts: "*.log"
