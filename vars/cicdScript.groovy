@@ -112,10 +112,7 @@ def call () {
                                 log.info "Cleanup: Terminate the app + delete unused image"
                                 withKubeConfig([credentialsId: 'secret-jenkins']) {
                                     log.info "Terminating the app: "
-                                    sh "./kubectl delete deployment,services -l app=${env.IMAGE_NAME}-${env.TAG}"
-                                    sh "sleep 3s"
-                                    log.info "Delete unused app image: "
-                                    sh "docker image rmi -f ${env.REPOSITORY}:${env.TAG}"
+                                    sh "./kubectl delete deployment,services -n default -l app=${env.IMAGE_NAME}-${env.TAG}"
                                 }
                             }
                             else {

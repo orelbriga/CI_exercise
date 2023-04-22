@@ -37,7 +37,7 @@ def getAppLogs() {
 
 def checkPodState() {
     def podName = sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} -n default| awk \'{print \$1}\' ",
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} -n default | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 
