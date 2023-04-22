@@ -37,12 +37,12 @@ def getAppLogs() {
 
 def checkPodState() {
     def podName = sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} -n default | awk \'{print \$1}\' ",
+            script: "./kubectl get pod -n default | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 
     def podState = sh(
-            script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} -n default | awk \'{print \$3}\' ",
+            script: "./kubectl get po -n default | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
             returnStdout: true).trim()
     if (podState != "Running") {
         error("Application pod ${podName} is not healthy, check app log")
