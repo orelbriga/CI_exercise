@@ -11,7 +11,7 @@ def getRequest(Map config = [:]) {
             returnStdout: true).trim()
 
     def nodePort = sh(
-            script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
+            script: "./kubectl get svc ${env.IMAGE_NAME}-svc-${env.TAG} -n default -o=jsonpath=\'{.spec.ports[].nodePort}\' ",
             returnStdout: true).trim()
 
     def IP = config.IP ?: clusterHostIP
@@ -31,18 +31,18 @@ def getRequest(Map config = [:]) {
 
 
 def getAppLogs() {
-    sh (script: "./kubectl logs deploy/${env.IMAGE_NAME}-${env.TAG} | tee ${env.IMAGE_NAME}-${env.TAG}.log")
+    sh (script: "./kubectl logs deploy/${env.IMAGE_NAME}-${env.TAG} -n default | tee ${env.IMAGE_NAME}-${env.TAG}.log")
 }
 
 
 def checkPodState() {
     def podName = sh(
-            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$1}\' ",
+            script: "./kubectl get pod | grep ${env.IMAGE_NAME}-${env.TAG} -n default| awk \'{print \$1}\' ",
             returnStdout: true
     ).trim()
 
     def podState = sh(
-            script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} | awk \'{print \$3}\' ",
+            script: "./kubectl get po | grep ${env.IMAGE_NAME}-${env.TAG} -n default | awk \'{print \$3}\' ",
             returnStdout: true).trim()
     if (podState != "Running") {
         error("Application pod ${podName} is not healthy, check app log")
